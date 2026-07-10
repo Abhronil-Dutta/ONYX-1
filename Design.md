@@ -82,3 +82,19 @@ Used for stack management and hardware state control.
 | `RETURN` | `0000` | `11111101` | Pop PC from Stack |
 | `NOP` | `0000` | `11111110` | No Operation |
 | `HALT` | `0000` | `11111111` | Stop execution / Wait for Interrupt |
+
+
+
+## Registers
+*16 registers from `R0` through `R15`*
+
+| Address | Name | Software Designation / Purpose |
+| :--- | :--- | :--- |
+| `0000` | R0 | Zero Register |
+| `0001` | R1 | Argument 1 |
+| `0010` | R2 | Argument 2 |
+| `0011` | R3 | Argument 3 |
+| `0100` | R4 | Return Value |
+| `0101` to `1101` | R5-R13 | General Purpose |
+| `1110` | R14 | Frame Pointer |
+| `1111` | R15 | Stack Pointer |

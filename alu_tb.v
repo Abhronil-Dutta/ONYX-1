@@ -1,5 +1,5 @@
 `timescale 1ns / 1ps // Sets the simulation time units
-
+// 'include "alu.v"s
 module alu_tb;
 
     reg  [15:0] dest_reg;
