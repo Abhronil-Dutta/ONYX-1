@@ -1,6 +1,6 @@
 module reg_file (
-    input clk,
-    input we,
+    input clk,                          // System clock
+    input we,                           // Write enabled
 
     input [3:0] read_addr_1,
     input [3:0] read_addr_2,
@@ -11,8 +11,9 @@ module reg_file (
     output reg [15:0] read_data_2
 );
 
-    reg [15:0] registers [15:0];
+    reg [15:0] registers [15:0];        // Register array
 
+    // Read 
     always @(*) begin
         if (read_addr_1 == 4'b0000) begin
             read_data_1 = 16'b0000000000000000;
@@ -28,6 +29,7 @@ module reg_file (
 
     end
 
+    // Write
     always @(posedge clk) begin
         if (we == 1'b1 && write_addr != 4'b0000) begin
             registers[write_addr] <= write_data;
