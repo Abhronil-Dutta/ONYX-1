@@ -1,0 +1,16 @@
+module inst_mem (
+    input [15:0] pc_addr,
+    output reg [15:0] instruction
+);
+
+    reg [15:0] memory [255:0];
+
+    always @(*) begin
+        instruction = memory[pc_addr[7:0]];
+    end
+
+    initial begin
+        $readmemh("program.hex", memory);
+    end
+
+endmodule
