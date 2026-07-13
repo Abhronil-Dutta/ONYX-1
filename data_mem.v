@@ -7,7 +7,7 @@ module data_mem (
     output reg [15:0] read_data
 );
 
-    reg [15:0] data_memory [65535:0];
+    reg [15:0] data_memory [65535:0];   // 64KB memory
 
     always @(*) begin
         read_data = data_memory[addr];
