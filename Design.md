@@ -17,7 +17,7 @@ Used for memory access, loading constants, and conditional branching.
 ### 3. Format J: Jumps & Calls
 Used for unconditional absolute control flow.
 * **Layout:** `[Primary Opcode: 4b] [Address: 12b]`
-* **Primary Opcodes:** `1001` to `1010`
+* **Primary Opcodes:** `1011` to `1100`
 
 ### 4. Format S: System & Stack Operations
 Used for stack management and hardware state control.
