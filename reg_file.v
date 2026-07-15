@@ -1,6 +1,6 @@
 module reg_file (
-    input clk,                          // System clock
-    input we,                           // Write enabled
+    input clk,                              // System clock
+    input reg_we,                           // Write enabled
 
     input [3:0] read_addr_1,
     input [3:0] read_addr_2,
@@ -31,7 +31,7 @@ module reg_file (
 
     // Write
     always @(posedge clk) begin
-        if (we == 1'b1 && write_addr != 4'b0000) begin
+        if (reg_we == 1'b1 && write_addr != 4'b0000) begin
             registers[write_addr] <= write_data;
         end
     end
