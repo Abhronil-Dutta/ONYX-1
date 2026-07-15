@@ -3,9 +3,11 @@ module pc (
     input reset,
     input halt,
     input load_jump,
+    input load_return,
     input load_branch,
 
     input [15:0] jump_target,
+    input [15:0] return_target,
     input [15:0] branch_offset,
 
     output reg [15:0] pc_out
@@ -20,6 +22,9 @@ module pc (
         end 
         else if (load_jump) begin
             pc_out <= jump_target;
+        end
+        else if (load_return) begin
+            pc_out <= return_target;
         end
         else if (load_branch) begin
             pc_out <= pc_out + branch_offset;
