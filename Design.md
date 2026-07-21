@@ -56,7 +56,7 @@ Used for stack management and hardware state control.
 | `LOADI` | `0001` | Dest | `Imm8` | Load 8-bit immediate into Reg |
 | `LOAD` | `0010` | Dest | `Addr8` | Load from Memory[Addr8] to Reg |
 | `STORE` | `0011` | Src | `Addr8` | Store Reg into Memory[Addr8] |
-| `SETBANK` | `0100` | Bank | `00000000` | Set active memory bank/page |
+| `SETBANK` | `0100` | `0000` (unused) | `Bank8` | Set active 8-bit memory bank/page |
 | `BR_ZERO` | `0101` | `0000` (unused) | `Offset8` | if (zero_flag) PC = PC + Offset8 |
 | `BR_NOTZ` | `0110` | `0000` (unused) | `Offset8` | if (!zero_flag) PC = PC + Offset8 |
 | `READ` | `0111` | Dest | `Port8` | Read from Hardware I/O Port8 |

@@ -67,15 +67,17 @@ module control_unit (
             end
 
             4'b0010: begin // LOAD (Load from Data Memory)
+                // Top-level wiring should build the 16-bit address as {bank_out, instruction[7:0]}.
                 reg_we        = 1'b1;   
                 reg_write_mux = 2'b01;  // Route Memory output to Register
             end
 
             4'b0011: begin // STORE (Store to Data Memory)
+                // Top-level wiring should build the 16-bit address as {bank_out, instruction[7:0]}.
                 mem_we = 1'b1;
             end
 
-            4'b0100: begin // SETBANK
+            4'b0100: begin // SETBANK (load 8-bit bank/page value)
                 bank_we = 1'b1;
             end
 
