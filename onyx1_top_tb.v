@@ -16,23 +16,20 @@ module onyx1_top_tb;
     always #5 clk = ~clk;
 
     initial begin
-        $display("=========================================================================");
-        $display("                         ONYX-1 CPU SIMULATION                           ");
-        $display("=========================================================================");
-        $display("Time |  PC  | Inst | Bank |   R1   |   R2   |   R4   |  [0x0308] (RAM) ");
-        $display("-------------------------------------------------------------------------");
+        $display("Time |  PC  | Inst |   SP   |   R1   |   R2   |   R3   |   R4   |  [0x0255]: Product  [0x0256]: Dummy");
+        $display("------------------------------------------------------------------------------------------------------");
 
-        // Use hierarchical referencing to spy on internal signals.
-        // We will monitor whenever the PC changes to see the state after each instruction executes.
-        $monitor("%4t | %h | %h |  %h  |  %h  |  %h  |  %h  |      %h      ", 
+        $monitor("%4t | %h | %h |  %h  |  %h  |  %h  |  %h  |  %h  |      %h               %h", 
                  $time, 
                  uut.pc, 
                  uut.instruction, 
-                 uut.bank_out, 
-                 uut.registers[1], 
-                 uut.registers[2], 
-                 uut.registers[4],
-                 uut.dmem.data_memory[16'h0308]); // Spying directly into the RAM address we write to
+                 uut.registers[15], // Spying on the Stack Pointer
+                 uut.registers[1],  // Multiplicand
+                 uut.registers[2],  // Multiplier (Watch this count down)
+                 uut.registers[3],  // Product Accumulator (Watch this go up by 7)
+                 uut.registers[4],  // Preserved State (Watch this pop back to AA)
+                 uut.dmem.data_memory[16'h0255],
+                 uut.dmem.data_memory[16'h0256]); // Spying directly into the RAM address we write to
 
         // Initialize Inputs
         clk = 0;
@@ -49,9 +46,7 @@ module onyx1_top_tb;
         // Wait one more clock cycle to let the halt register print
         #10;
         
-        $display("=========================================================================");
-        $display("                        CPU HALTED. TESTS COMPLETE.                      ");
-        $display("=========================================================================");
+        $display("CPU HALTED. TESTS COMPLETE.");
         
         $finish;
     end

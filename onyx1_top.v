@@ -42,6 +42,11 @@ module onyx1_top (
     wire [15:0] mem_read_data;
     wire [15:0] io_read_data;
 
+    reg  saved_zero_flag;
+    wire update_flags = (instruction[15:12] == 4'b0000) || // All Format R (ALU/CMP)
+                        (instruction[15:12] == 4'b1001) || // ADDI
+                        (instruction[15:12] == 4'b1010);   // SUBI
+
     // Multiplexers & Routing Logic
 
     // ALU Source B Mux: 0 = Reg Src, 1 = Immediate Ext
@@ -49,10 +54,10 @@ module onyx1_top (
 
     // Data Memory Address Mux: Stack Pointer (R15) or {Bank, Imm8}
     wire [15:0] sp = registers[4'b1111]; 
-    wire [15:0] mem_addr = (stack_push || stack_pop) ? sp : {bank_out, instruction[7:0]};
+    wire [15:0] mem_addr = stack_push ? sp : (stack_pop ? sp + 1'b1 : {bank_out, instruction[7:0]});
 
     // Data Memory Write Data Mux: PC (for CALL) or Dest Reg (for PUSH/STORE)
-    wire [15:0] mem_write_data = (instruction[15:12] == 4'b1100) ? pc : reg_dest_val;
+    wire [15:0] mem_write_data = (instruction[15:12] == 4'b1100) ? pc + 1'b1 : reg_dest_val;
 
     // Register Write Data Mux: 00=ALU, 01=Mem, 10=IO, 11=Stack(Mem)
     wire [15:0] reg_write_data = (reg_write_mux == 2'b00) ? alu_result :
@@ -68,7 +73,7 @@ module onyx1_top (
 
     control_unit cu (
         .instruction(instruction),
-        .zero_flag(zero_flag),
+        .zero_flag(saved_zero_flag),
         .reg_we(reg_we),
         .mem_we(mem_we),
         .bank_we(bank_we),
@@ -126,10 +131,11 @@ module onyx1_top (
 
     // Synchronous Logic (PC, Register File, Stack Pointer)
     integer i;
-    
+
     always @(posedge clk) begin
         if (reset) begin
             pc <= 16'h0000;
+            saved_zero_flag <= 1'b0;
             // Initialize Registers
             for (i = 0; i < 16; i = i + 1) begin
                 registers[i] <= 16'h0000;
@@ -138,6 +144,9 @@ module onyx1_top (
             registers[15] <= 16'hFFFF; 
         end else if (!halt) begin
             
+            if (update_flags) begin  
+                saved_zero_flag <= zero_flag;
+            end
             // --- Program Counter Logic ---
             if (pc_jump) begin
                 // Format J Provides 12-bit absolute jump within current bank
