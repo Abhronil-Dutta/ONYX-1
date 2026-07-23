@@ -1,6 +1,6 @@
 # ONYX-1
 
-ONYX-1 is a custom 16-bit CPU implemented in Verilog. It is designed as a compact reference implementation for low-level firmware, systems, and kernel-oriented portfolio work.
+ONYX-1 is a custom 16-bit CPU implemented in Verilog. It is designed as a compact reference implementation for a future machine :).
 
 ## 1. Project Overview
 
